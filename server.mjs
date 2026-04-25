@@ -116,6 +116,9 @@ function statusForRank(rank) {
 
 async function runSerpApiSearch({ keyword, location, campaign }) {
   const apiKey = campaign.apiKey || process.env.SERPAPI_KEY;
+  if (!apiKey) {
+    throw new Error("No SerpApi key provided.");
+  }
   const params = new URLSearchParams({
     engine: "google",
     q: keyword,
