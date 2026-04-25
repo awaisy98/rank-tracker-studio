@@ -232,6 +232,8 @@ const server = http.createServer(async (request, response) => {
   await serveStatic(request, response);
 });
 
-server.listen(PORT, "127.0.0.1", () => {
-  console.log(`LocalRank Studio running at http://127.0.0.1:${PORT}/`);
+const PORT = process.env.PORT || 4173;
+
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`LocalRank Studio running on port ${PORT}`);
 });
