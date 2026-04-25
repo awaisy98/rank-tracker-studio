@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LocalRank Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <div class="page-veil" aria-hidden="true"></div>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Project setup">
+        <div class="sidebar-inner">
+          <div class="brand-panel">
+            <div class="brand">
+              <div class="brand-mark">LR</div>
+              <div>
+                <p class="eyebrow">SEO rank tracker</p>
+                <h1>LocalRank Studio</h1>
+              </div>
+            </div>
+            <p class="brand-copy">Track local rankings with a cleaner workflow for client campaigns, city-level visibility checks, and target page monitoring.</p>
+            <div class="brand-stats">
+              <div>
+                <span>Locations</span>
+                <strong>Multi-city</strong>
+              </div>
+              <div>
+                <span>Imports</span>
+                <strong>CSV and Excel</strong>
+              </div>
+            </div>
+          </div>
+
+          <form id="trackerForm" class="control-stack">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Client setup</h2>
+                  <p class="section-note">Campaign identity and primary domain</p>
+                </div>
+                <span class="status-pill">Draft</span>
+              </div>
+              <label>
+                Client name
+                <input id="clientName" type="text" placeholder="Bright Dental Co.">
+              </label>
+              <label>
+                Campaign domain
+                <input id="domain" type="url" placeholder="https://example.com">
+              </label>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Keyword universe</h2>
+                  <p class="section-note">Paste keywords or upload a sheet</p>
+                </div>
+                <span id="keywordCount" class="metric-chip">0</span>
+              </div>
+              <textarea id="keywordInput" rows="7" placeholder="emergency dentist&#10;teeth whitening near me&#10;family dentist chicago"></textarea>
+              <div class="file-row">
+                <label class="file-button" for="keywordFile">
+                  <span>Import file</span>
+                  <input id="keywordFile" type="file" accept=".csv,.txt,.xlsx,.xls">
+                </label>
+                <button class="ghost-button" type="button" id="sampleButton">Load sample</button>
+                <button class="ghost-button" type="button" id="clearKeywordsButton">Reset</button>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Location profile</h2>
+                  <p class="section-note">Geo targeting and device context</p>
+                </div>
+                <span class="metric-chip">Local</span>
+              </div>
+              <div class="two-col">
+                <label>
+                  Country
+                  <select id="country">
+                    <option>United States</option>
+                    <option>United Kingdom</option>
+                    <option>Canada</option>
+                    <option>Australia</option>
+                    <option>India</option>
+                    <option>United Arab Emirates</option>
+                  </select>
+                </label>
+                <label>
+                  Device
+                  <select id="device">
+                    <option>Mobile</option>
+                    <option>Desktop</option>
+                  </select>
+                </label>
+              </div>
+              <label>
+                Cities, ZIPs, or regions
+                <input id="locations" type="text" placeholder="Chicago, IL; 60614; Oak Park">
+              </label>
+              <div class="two-col">
+                <label>
+                  Language
+                  <select id="language">
+                    <option>English</option>
+                    <option>Spanish</option>
+                    <option>French</option>
+                    <option>Arabic</option>
+                    <option>Hindi</option>
+                  </select>
+                </label>
+                <label>
+                  Engine
+                  <select id="engine">
+                    <option>Google</option>
+                    <option>Bing</option>
+                  </select>
+                </label>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Page targeting</h2>
+                  <p class="section-note">URLs and rank collection method</p>
+                </div>
+                <span id="pageCount" class="metric-chip">0</span>
+              </div>
+              <textarea id="targetPages" rows="5" placeholder="https://example.com/services/emergency-dentist&#10;https://example.com/services/teeth-whitening"></textarea>
+              <label>
+                Location engine
+                <select id="locationEngine">
+                  <option>Compliant SERP API</option>
+                  <option>Proxy pool connector</option>
+                  <option>Manual VPN workflow</option>
+                </select>
+              </label>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Rank source</h2>
+                  <p class="section-note">Control live mode and backend endpoint</p>
+                </div>
+                <span id="sourceBadge" class="status-pill">Demo</span>
+              </div>
+              <label>
+                Result source
+                <select id="resultSource">
+                  <option value="demo">Demo data only</option>
+                  <option value="live">SerpApi live backend</option>
+                </select>
+              </label>
+              <label>
+                Backend endpoint
+                <input id="providerEndpoint" type="text" value="/api/rank-check" placeholder="/api/rank-check">
+              </label>
+              <p class="field-note">Live rankings use a local backend with your SerpApi free-tier key. Demo mode is for layout and workflow testing only.</p>
+            </section>
+
+            <button class="primary-button" type="submit" id="runButton">
+              <span id="runButtonText">Run demo check</span>
+              <span class="button-arrow" aria-hidden="true">-></span>
+            </button>
+          </form>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="hero-card topbar">
+          <div class="hero-copy">
+            <p class="eyebrow">Live workspace</p>
+            <h2 id="workspaceTitle">Untitled campaign</h2>
+            <p class="hero-text">A cleaner command center for local SEO reporting, page matching, and rank visibility by market.</p>
+            <div class="hero-badges">
+              <span>Local visibility</span>
+              <span>Client-ready exports</span>
+              <span>API-ready tracking</span>
+            </div>
+          </div>
+          <div class="hero-side">
+            <div class="hero-mini-card">
+              <span>Rank source</span>
+              <strong id="sourceSummary">Demo runner, API-ready</strong>
+            </div>
+            <div class="top-actions">
+              <button id="saveButton" class="icon-button" type="button" title="Save campaign" aria-label="Save campaign">Save</button>
+              <button id="exportButton" class="icon-button" type="button" title="Export CSV" aria-label="Export CSV">Export CSV</button>
+            </div>
+          </div>
+        </header>
+
+        <section class="kpi-grid" aria-label="Campaign metrics">
+          <article class="metric-card">
+            <span>Tracked keywords</span>
+            <strong id="totalKeywords">0</strong>
+            <p>Keyword universe under watch</p>
+          </article>
+          <article class="metric-card">
+            <span>Average rank</span>
+            <strong id="averageRank">-</strong>
+            <p>Average visibility across tracked terms</p>
+          </article>
+          <article class="metric-card">
+            <span>Top 10</span>
+            <strong id="topTen">0%</strong>
+            <p>Share of wins on page one</p>
+          </article>
+          <article class="metric-card">
+            <span>Page matches</span>
+            <strong id="pageMatches">0</strong>
+            <p>Tracked results mapped to target URLs</p>
+          </article>
+        </section>
+
+        <section class="serp-console">
+          <div class="accuracy-banner" id="accuracyBanner">
+            Demo results are not Google rankings. Connect a live SERP API backend before using reports for clients.
+          </div>
+          <div class="console-head">
+            <div>
+              <p class="eyebrow">SERP monitor</p>
+              <h2>Keyword positions by location</h2>
+            </div>
+            <div class="segmented" role="tablist" aria-label="Table filter">
+              <button type="button" class="active" data-filter="all">All</button>
+              <button type="button" data-filter="wins">Wins</button>
+              <button type="button" data-filter="issues">Issues</button>
+            </div>
+          </div>
+
+          <div class="run-strip">
+            <div>
+              <span class="run-dot"></span>
+              <span id="runStatus">Ready for a local rank check</span>
+            </div>
+            <span id="lastRun">No scan yet</span>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Keyword</th>
+                  <th>Location</th>
+                  <th>Rank</th>
+                  <th>Change</th>
+                  <th>Matched page</th>
+                  <th>SERP features</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody">
+                <tr class="empty-row">
+                  <td colspan="7">Add keywords, choose a location, and run a check.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="insight-grid">
+          <article class="insight-panel">
+            <div class="panel-head">
+              <h2>Priority queue</h2>
+              <span id="issueCount" class="metric-chip">0</span>
+            </div>
+            <ul id="priorityList" class="priority-list">
+              <li>No ranking gaps yet.</li>
+            </ul>
+          </article>
+          <article class="insight-panel">
+            <div class="panel-head">
+              <h2>Provider readiness</h2>
+              <span class="status-pill good">Ready</span>
+            </div>
+            <div class="provider-stack">
+              <div>
+                <span>Geo request</span>
+                <strong id="geoSummary">Location pending</strong>
+              </div>
+              <div>
+                <span>IP strategy</span>
+                <strong id="ipSummary">Provider selected after setup</strong>
+              </div>
+              <div>
+                <span>Result mode</span>
+                <strong id="sourceSummary">Demo runner, API-ready</strong>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <footer class="app-footer">
+          <p>All Copyright Reserved by Awais Yaseen</p>
+          <a href="https://www.linkedin.com/in/awais-yaseen/" target="_blank" rel="noreferrer">Awais Yaseen</a>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>
