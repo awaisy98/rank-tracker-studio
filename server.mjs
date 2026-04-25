@@ -155,7 +155,7 @@ async function runSerpApiSearch({ keyword, location, campaign }) {
 }
 
 async function handleRankCheck(request, response) {
-  if (!process.env.SERPAPI_KEY) {
+  if (!process.env.SERPAPI_KEY && !body.apiKey) {
     sendJson(response, 500, {
       error: "SERPAPI_KEY is missing. Create a free SerpApi account, then start the server with SERPAPI_KEY=your_key."
     });
@@ -165,7 +165,7 @@ async function handleRankCheck(request, response) {
   try {
     const body = await readJson(request);
     const campaign = {
-      apiKey: String(body.apiKey || "")
+      apiKey: String(body.apiKey || ""),
       clientName: String(body.clientName || ""),
       domain: String(body.domain || ""),
       keywords: cleanList(body.keywords),
