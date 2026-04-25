@@ -137,7 +137,8 @@ function readCampaign() {
     pages,
     locationEngine: els.locationEngine.value,
     resultSource: els.resultSource.value,
-    providerEndpoint: els.providerEndpoint.value.trim()
+    providerEndpoint: els.providerEndpoint.value.trim(),
+    apiKey: document.querySelector("#apiKey")?.value?.trim() || ""
   };
 }
 
