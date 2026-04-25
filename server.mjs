@@ -115,7 +115,7 @@ function statusForRank(rank) {
 }
 
 async function runSerpApiSearch({ keyword, location, campaign }) {
-  const apiKey = process.env.SERPAPI_KEY;
+  const apiKey = campaign.apiKey || process.env.SERPAPI_KEY;
   const params = new URLSearchParams({
     engine: "google",
     q: keyword,
@@ -162,6 +162,7 @@ async function handleRankCheck(request, response) {
   try {
     const body = await readJson(request);
     const campaign = {
+      apiKey: String(body.apiKey || "")
       clientName: String(body.clientName || ""),
       domain: String(body.domain || ""),
       keywords: cleanList(body.keywords),
